@@ -1,0 +1,1249 @@
+<!DOCTYPE html><html class="dark" lang="en" style=""><svg class="inline-defs-container" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden"></svg><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<meta content="web_dashboard" name="shell-type">
+<style>
+  @layer base { html, body { margin: 0; padding: 0; } body { overscroll-behavior: none; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } }
+  ::-webkit-scrollbar { display: none; }
+  .view-section { display: none; }
+  .view-section.active { display: flex; flex-direction: column; width: 100%; min-height: 100%; gap: 2rem; }
+</style>
+<script src="https://cdn.tailwindcss.com"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "secondary-container": "#00e3fd",
+          "primary": "#bec6e0",
+          "on-background": "#d8e3fb",
+          "secondary-fixed": "#9cf0ff",
+          "secondary-fixed-dim": "#00daf3",
+          "inverse-surface": "#d8e3fb",
+          "surface-container": "#152031",
+          "on-tertiary-fixed": "#001a42",
+          "tertiary-container": "#00163a",
+          "tertiary-fixed-dim": "#adc6ff",
+          "on-secondary-container": "#00616d",
+          "tertiary": "#adc6ff",
+          "on-surface": "#d8e3fb",
+          "primary-fixed": "#dae2fd",
+          "on-tertiary-container": "#357df1",
+          "primary-fixed-dim": "#bec6e0",
+          "tertiary-fixed": "#d8e2ff",
+          "error-container": "#93000a",
+          "on-tertiary": "#002e6a",
+          "on-secondary": "#00363d",
+          "on-primary": "#283044",
+          "on-surface-variant": "#c6c6cd",
+          "on-secondary-fixed-variant": "#004f58",
+          "outline": "#909097",
+          "surface-bright": "#2f3a4c",
+          "surface": "#081425",
+          "inverse-on-surface": "#263143",
+          "on-primary-fixed": "#131b2e",
+          "surface-container-high": "#1f2a3c",
+          "surface-dim": "#081425",
+          "surface-container-lowest": "#040e1f",
+          "surface-variant": "#2a3548",
+          "on-primary-container": "#798098",
+          "error": "#ffb4ab",
+          "on-primary-fixed-variant": "#3f465c",
+          "surface-tint": "#bec6e0",
+          "surface-container-low": "#111c2d",
+          "on-tertiary-fixed-variant": "#004395",
+          "background": "#081425",
+          "on-error": "#690005",
+          "on-secondary-fixed": "#001f24",
+          "surface-container-highest": "#2a3548",
+          "secondary": "#bdf4ff",
+          "outline-variant": "#45464d",
+          "primary-container": "#0f172a",
+          "on-error-container": "#ffdad6",
+          "inverse-primary": "#565e74"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "space-lg": "1rem",
+          "space-md": "0.5rem",
+          "margin": "1rem",
+          "gutter": "0.75rem",
+          "space-xs": "0.125rem",
+          "space-xl": "1.5rem",
+          "space-sm": "0.25rem"
+        },
+        "fontFamily": {
+          "body-sm": ["Inter"],
+          "body-lg": ["Inter"],
+          "label-lg": ["JetBrains Mono"],
+          "headline-lg": ["JetBrains Mono"],
+          "label-md": ["JetBrains Mono"],
+          "headline-md": ["JetBrains Mono"],
+          "body-md": ["Inter"],
+          "headline-sm": ["JetBrains Mono"],
+          "label-sm": ["JetBrains Mono"]
+        }
+      }
+    }
+  }
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+</head>
+<body class="bg-surface font-body-md text-on-surface">
+<aside class="fixed left-0 top-0 h-full w-72 bg-surface-container-low z-50 flex flex-col pt-6 pb-8 border-r border-outline-variant/20">
+<div class="px-6 mb-8">
+<div class="text-headline-sm font-headline-sm text-primary uppercase tracking-wider">EV Chassis Analyzer</div>
+<div class="text-body-sm text-on-surface-variant mt-space-xs">Project: EV Chassis</div>
+</div>
+<nav class="flex-1 px-4 space-y-space-sm" id="sidebar-nav">
+<a class="nav-link flex items-center px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors cursor-pointer" data-view="dashboard" onclick="switchView('dashboard')">
+<span class="material-symbols-outlined mr-space-md text-[20px]">dashboard</span>Dashboard
+    </a>
+<a class="nav-link flex items-center px-4 py-3 rounded-lg hover:bg-surface-container-high hover:text-on-surface transition-colors cursor-pointer text-on-surface-variant" data-view="inputs" onclick="switchView('inputs')">
+<span class="material-symbols-outlined mr-space-md text-[20px]">settings_input_component</span>Project Inputs
+    </a>
+<a class="nav-link flex items-center px-4 py-3 rounded-lg hover:bg-surface-container-high hover:text-on-surface transition-colors cursor-pointer bg-primary-container text-on-primary-container font-medium" data-view="simulation" onclick="switchView('simulation')">
+<span class="material-symbols-outlined mr-space-md text-[20px]">play_arrow</span>Simulation
+    </a>
+<a class="nav-link flex items-center px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors cursor-pointer" data-view="analysis" onclick="switchView('analysis')">
+<span class="material-symbols-outlined mr-space-md text-[20px]">analytics</span>Analysis
+    </a>
+<a class="nav-link flex items-center px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors cursor-pointer" data-view="reports" onclick="switchView('reports')">
+<span class="material-symbols-outlined mr-space-md text-[20px]">description</span>Reports
+    </a>
+</nav>
+<div class="px-6 pt-4 border-t border-outline-variant/30 flex justify-between items-center text-label-sm text-on-surface-variant">
+<span class="">v2.4.1-CAE</span>
+<button class="text-secondary-fixed hover:underline" onclick="resetProjectData()">Reset Project</button>
+</div>
+</aside>
+<div class="pl-72">
+<header class="fixed top-0 left-72 right-0 h-16 bg-surface/90 z-40 flex items-center justify-between px-8 border-b border-outline-variant/20">
+<div class="flex items-center gap-space-lg">
+<span class="text-headline-md font-headline-md text-on-surface" id="header-title">Load Distribution Analyzer</span>
+<div class="flex items-center gap-space-sm px-space-md py-space-xs bg-surface-container-high rounded-full">
+<span class="w-2 h-2 rounded-full bg-secondary-fixed-dim"></span>
+<span class="text-label-md font-label-md text-secondary-fixed uppercase tracking-wider" id="header-badge">STATIC ANALYSIS</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xl">
+<button class="flex items-center gap-space-sm text-on-surface-variant hover:text-on-surface transition-colors relative">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute -top-1 -right-1 w-2 h-2 bg-secondary-container rounded-full"></span>
+</button>
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-[18px]">person</span>
+</div>
+</div>
+</header>
+<main class="relative pt-24 pb-12 min-h-screen bg-surface px-8">
+<!-- 1. DASHBOARD VIEW -->
+<div class="view-section" id="view-dashboard">
+<div class="flex justify-between items-center bg-surface-container-low p-6 rounded-xl border border-outline-variant/30 shadow-xl">
+<div>
+<h1 class="text-headline-lg font-headline-lg text-on-surface">EV Chassis Project</h1>
+<p class="text-body-sm text-on-surface-variant mt-1">Multi-view engineering environment for weight distribution, center of gravity solvers, and wheel load analysis.</p>
+</div>
+<div class="flex gap-4">
+<button class="bg-secondary-container text-on-secondary-container px-5 py-2.5 rounded-lg font-headline-sm text-headline-sm hover:brightness-110 transition-all flex items-center gap-2" onclick="switchView('inputs')">
+<span class="material-symbols-outlined text-[20px]">add_circle</span> START NEW ANALYSIS
+          </button>
+<button class="bg-surface-container-highest text-on-surface px-5 py-2.5 rounded-lg font-label-md text-label-md hover:bg-surface-bright transition-all flex items-center gap-2 border border-outline-variant" onclick="loadDemoProject()">
+<span class="material-symbols-outlined text-[18px]">folder_open</span> LOAD PROJECT
+          </button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+<div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/30 shadow-lg">
+<div class="text-label-md text-on-surface-variant flex justify-between items-center">
+            TOTAL MASS <span class="text-xs bg-surface-container px-2 py-0.5 rounded text-secondary-fixed">Demo Data</span>
+</div>
+<div class="text-headline-lg font-headline-lg text-secondary-fixed mt-3" id="dash-total-mass">210 kg</div>
+<div class="text-body-sm text-on-surface-variant mt-1">Components sum active</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/30 shadow-lg">
+<div class="text-label-md text-on-surface-variant flex justify-between items-center">
+            TOTAL WEIGHT <span class="text-xs bg-surface-container px-2 py-0.5 rounded text-secondary-fixed">Demo Data</span>
+</div>
+<div class="text-headline-lg font-headline-lg text-secondary-fixed mt-3" id="dash-total-weight">2.06 kN</div>
+<div class="text-body-sm text-on-surface-variant mt-1">Gravity g = 9.81 m/s²</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/30 shadow-lg">
+<div class="text-label-md text-on-surface-variant flex justify-between items-center">
+            CG POSITION <span class="text-xs bg-surface-container px-2 py-0.5 rounded text-secondary-fixed">Demo Data</span>
+</div>
+<div class="text-headline-md font-headline-md text-secondary-fixed mt-3" id="dash-cg">X: 1123 | Y: 518 mm</div>
+<div class="text-body-sm text-on-surface-variant mt-1">Balanced longitudinally</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/30 shadow-lg">
+<div class="text-label-md text-on-surface-variant flex justify-between items-center">
+            AXLE SPLIT <span class="text-xs bg-surface-container px-2 py-0.5 rounded text-secondary-fixed">Demo Data</span>
+</div>
+<div class="text-headline-md font-headline-md text-secondary-fixed mt-3" id="dash-split">48.9% / 51.1%</div>
+<div class="text-body-sm text-on-surface-variant mt-1">Front / Rear Ratio</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/30 shadow-xl flex flex-col justify-between">
+<div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface mb-4">Quick Navigation</h3>
+<div class="space-y-3">
+<div class="p-4 bg-surface-container rounded-lg flex items-center justify-between cursor-pointer hover:bg-surface-bright transition-colors" onclick="switchView('inputs')">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary-fixed">settings_input_component</span>
+<div>
+<div class="font-headline-sm text-on-surface">1. Project Inputs &amp; Component Table</div>
+<div class="text-body-sm text-on-surface-variant">Configure chassis geometry, coordinates, and mass loads.</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">arrow_forward</span>
+</div>
+<div class="p-4 bg-surface-container rounded-lg flex items-center justify-between cursor-pointer hover:bg-surface-bright transition-colors" onclick="switchView('simulation')">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary-fixed">play_arrow</span>
+<div>
+<div class="font-headline-sm text-on-surface">2. Simulation &amp; Load Flow View</div>
+<div class="text-body-sm text-on-surface-variant">Interactive 3D chassis graphic with dynamic load solver overlay.</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">arrow_forward</span>
+</div>
+<div class="p-4 bg-surface-container rounded-lg flex items-center justify-between cursor-pointer hover:bg-surface-bright transition-colors" onclick="switchView('analysis')">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary-fixed">analytics</span>
+<div>
+<div class="font-headline-sm text-on-surface">3. Analysis &amp; Readouts</div>
+<div class="text-body-sm text-on-surface-variant">Detailed telemetry, moments, and equilibrium validation.</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">arrow_forward</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/30 shadow-xl">
+<h3 class="text-headline-sm font-headline-sm text-on-surface mb-4">Active System Status</h3>
+<div class="space-y-4 text-label-md">
+<div class="flex justify-between p-3 bg-surface-container rounded">
+<span class="text-on-surface-variant">Solver Engine</span>
+<span class="text-secondary-fixed font-headline-sm">Active (Static Equilibrium)</span>
+</div>
+<div class="flex justify-between p-3 bg-surface-container rounded">
+<span class="text-on-surface-variant">Active Load Elements</span>
+<span class="text-secondary-fixed font-headline-sm" id="dash-active-count">5 Elements</span>
+</div>
+<div class="flex justify-between p-3 bg-surface-container rounded">
+<span class="text-on-surface-variant">Battery Pack Status</span>
+<span class="text-error font-headline-sm">None (Excluded per specs)</span>
+</div>
+<div class="flex justify-between p-3 bg-surface-container rounded">
+<span class="text-on-surface-variant">Validation Check</span>
+<span class="text-secondary-fixed font-headline-sm">Passed (Sum F_z = 0)</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 2. PROJECT INPUTS VIEW -->
+<div class="view-section" id="view-inputs">
+<div class="flex justify-between items-center bg-surface-container-low p-6 rounded-xl border border-outline-variant/30 shadow-xl">
+<div>
+<h1 class="text-headline-lg font-headline-lg text-on-surface">Project Inputs &amp; Configuration</h1>
+<p class="text-body-sm text-on-surface-variant mt-1">Specify chassis boundary geometry and component mass matrix.</p>
+</div>
+<button class="bg-secondary-container text-on-secondary-container px-6 py-3 rounded-lg font-headline-sm text-headline-sm hover:brightness-110 transition-all flex items-center gap-2 shadow-lg cursor-pointer" onclick="runAnalysisFromInputs()">
+<span class="material-symbols-outlined text-[20px]">play_arrow</span> ▶ RUN ANALYSIS
+        </button>
+</div>
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+<!-- Chassis Parameters & Inputs -->
+<div class="xl:col-span-2 space-y-6">
+<div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/30 shadow-xl">
+<h3 class="text-headline-sm font-headline-sm text-on-surface mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary-fixed">straighten</span> Chassis Geometry Parameters
+            </h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-label-md">
+<div class="bg-surface-container p-3 rounded">
+<label class="text-on-surface-variant block mb-1">Overall Length (mm)</label>
+<input class="w-full bg-surface-container-highest text-secondary-fixed px-2 py-1.5 rounded border border-outline-variant/50 focus:border-secondary-fixed outline-none" id="param-length" onchange="updateChassisParam()" type="number" value="4200">
+</div>
+<div class="bg-surface-container p-3 rounded">
+<label class="text-on-surface-variant block mb-1">Overall Width (mm)</label>
+<input class="w-full bg-surface-container-highest text-secondary-fixed px-2 py-1.5 rounded border border-outline-variant/50 focus:border-secondary-fixed outline-none" id="param-width" onchange="updateChassisParam()" type="number" value="1900">
+</div>
+<div class="bg-surface-container p-3 rounded">
+<label class="text-on-surface-variant block mb-1">Wheelbase (mm)</label>
+<input class="w-full bg-surface-container-highest text-secondary-fixed px-2 py-1.5 rounded border border-outline-variant/50 focus:border-secondary-fixed outline-none" id="param-wheelbase" onchange="updateChassisParam()" type="number" value="2650">
+</div>
+<div class="bg-surface-container p-3 rounded">
+<label class="text-on-surface-variant block mb-1">Front Track (mm)</label>
+<input class="w-full bg-surface-container-highest text-secondary-fixed px-2 py-1.5 rounded border border-outline-variant/50 focus:border-secondary-fixed outline-none" id="param-track-f" onchange="updateChassisParam()" type="number" value="1580">
+</div>
+<div class="bg-surface-container p-3 rounded">
+<label class="text-on-surface-variant block mb-1">Rear Track (mm)</label>
+<input class="w-full bg-surface-container-highest text-secondary-fixed px-2 py-1.5 rounded border border-outline-variant/50 focus:border-secondary-fixed outline-none" id="param-track-r" onchange="updateChassisParam()" type="number" value="1580">
+</div>
+<div class="bg-surface-container p-3 rounded">
+<label class="text-on-surface-variant block mb-1">Front Overhang (mm)</label>
+<input class="w-full bg-surface-container-highest text-secondary-fixed px-2 py-1.5 rounded border border-outline-variant/50 focus:border-secondary-fixed outline-none" id="param-oh-f" onchange="updateChassisParam()" type="number" value="850">
+</div>
+</div>
+</div>
+<!-- Applied Loads Table -->
+<div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/30 shadow-xl">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-headline-sm font-headline-sm text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary-fixed">weight</span> Applied Loads Matrix (No Battery)
+              </h3>
+<button class="text-xs bg-surface-container text-secondary-fixed px-3 py-1.5 rounded hover:bg-surface-bright transition-colors flex items-center gap-1" onclick="addNewLoadItem()">
+<span class="material-symbols-outlined text-[16px]">add</span> Add Element
+              </button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left text-label-md">
+<thead>
+<tr class="border-b border-outline-variant/30 text-on-surface-variant">
+<th class="pb-3">Component Name</th>
+<th class="pb-3">Mass (kg)</th>
+<th class="pb-3">X Position (mm)</th>
+<th class="pb-3">Y Position (mm)</th>
+<th class="pb-3 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10" id="inputs-table-body">
+        <tr>
+          <td class="py-3"><input type="text" value="Driver &amp; Cockpit" onchange="updateCompName('driver', this.value)" class="bg-surface-container-highest text-on-surface px-2 py-1 rounded w-full border border-outline-variant/30"></td>
+          <td class="py-3"><input type="number" value="70" onchange="updateMass('driver', this.value)" class="bg-surface-container-highest text-secondary-fixed px-2 py-1 rounded w-20"></td>
+          <td class="py-3"><input type="number" value="850" onchange="updatePos('driver', 'x', this.value)" class="bg-surface-container-highest text-secondary-fixed px-2 py-1 rounded w-24"></td>
+          <td class="py-3"><input type="number" value="353.98393645842236" onchange="updatePos('driver', 'y', this.value)" class="bg-surface-container-highest text-secondary-fixed px-2 py-1 rounded w-24"></td>
+          <td class="py-3 text-right"><button onclick="removeComponent('driver')" class="text-error hover:underline"><span class="material-symbols-outlined text-[18px]">delete</span></button></td>
+        </tr>
+      
+        <tr>
+          <td class="py-3"><input type="text" value="Rear Dual Motor" onchange="updateCompName('motor', this.value)" class="bg-surface-container-highest text-on-surface px-2 py-1 rounded w-full border border-outline-variant/30"></td>
+          <td class="py-3"><input type="number" value="45" onchange="updateMass('motor', this.value)" class="bg-surface-container-highest text-secondary-fixed px-2 py-1 rounded w-20"></td>
+          <td class="py-3"><input type="number" value="1550" onchange="updatePos('motor', 'x', this.value)" class="bg-surface-container-highest text-secondary-fixed px-2 py-1 rounded w-24"></td>
+          <td class="py-3"><input type="number" value="600" onchange="updatePos('motor', 'y', this.value)" class="bg-surface-container-highest text-secondary-fixed px-2 py-1 rounded w-24"></td>
+          <td class="py-3 text-right"><button onclick="removeComponent('motor')" class="text-error hover:underline"><span class="material-symbols-outlined text-[18px]">delete</span></button></td>
+        </tr>
+      
+        <tr>
+          <td class="py-3"><input type="text" value="Driver Seat" onchange="updateCompName('seat', this.value)" class="bg-surface-container-highest text-on-surface px-2 py-1 rounded w-full border border-outline-variant/30"></td>
+          <td class="py-3"><input type="number" value="15" onchange="updateMass('seat', this.value)" class="bg-surface-container-highest text-secondary-fixed px-2 py-1 rounded w-20"></td>
+          <td class="py-3"><input type="number" value="900" onchange="updatePos('seat', 'x', this.value)" class="bg-surface-container-highest text-secondary-fixed px-2 py-1 rounded w-24"></td>
+          <td class="py-3"><input type="number" value="600" onchange="updatePos('seat', 'y', this.value)" class="bg-surface-container-highest text-secondary-fixed px-2 py-1 rounded w-24"></td>
+          <td class="py-3 text-right"><button onclick="removeComponent('seat')" class="text-error hover:underline"><span class="material-symbols-outlined text-[18px]">delete</span></button></td>
+        </tr>
+      
+        <tr>
+          <td class="py-3"><input type="text" value="Suspension Assembly" onchange="updateCompName('suspension', this.value)" class="bg-surface-container-highest text-on-surface px-2 py-1 rounded w-full border border-outline-variant/30"></td>
+          <td class="py-3"><input type="number" value="30" onchange="updateMass('suspension', this.value)" class="bg-surface-container-highest text-secondary-fixed px-2 py-1 rounded w-20"></td>
+          <td class="py-3"><input type="number" value="1100" onchange="updatePos('suspension', 'x', this.value)" class="bg-surface-container-highest text-secondary-fixed px-2 py-1 rounded w-24"></td>
+          <td class="py-3"><input type="number" value="600" onchange="updatePos('suspension', 'y', this.value)" class="bg-surface-container-highest text-secondary-fixed px-2 py-1 rounded w-24"></td>
+          <td class="py-3 text-right"><button onclick="removeComponent('suspension')" class="text-error hover:underline"><span class="material-symbols-outlined text-[18px]">delete</span></button></td>
+        </tr>
+      
+        <tr>
+          <td class="py-3"><input type="text" value="Other Load" onchange="updateCompName('other', this.value)" class="bg-surface-container-highest text-on-surface px-2 py-1 rounded w-full border border-outline-variant/30"></td>
+          <td class="py-3"><input type="number" value="50" onchange="updateMass('other', this.value)" class="bg-surface-container-highest text-secondary-fixed px-2 py-1 rounded w-20"></td>
+          <td class="py-3"><input type="number" value="1200" onchange="updatePos('other', 'x', this.value)" class="bg-surface-container-highest text-secondary-fixed px-2 py-1 rounded w-24"></td>
+          <td class="py-3"><input type="number" value="600" onchange="updatePos('other', 'y', this.value)" class="bg-surface-container-highest text-secondary-fixed px-2 py-1 rounded w-24"></td>
+          <td class="py-3 text-right"><button onclick="removeComponent('other')" class="text-error hover:underline"><span class="material-symbols-outlined text-[18px]">delete</span></button></td>
+        </tr>
+      </tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Summary & Mini Preview -->
+<div class="space-y-6">
+<div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/30 shadow-xl">
+<h3 class="text-headline-sm font-headline-sm text-on-surface mb-4">Input Summary</h3>
+<div class="space-y-3 text-label-md">
+<div class="flex justify-between p-3 bg-surface-container rounded">
+<span class="text-on-surface-variant">Total Mass Sum</span>
+<span class="text-secondary-fixed font-headline-sm" id="summary-total-mass">210 kg</span>
+</div>
+<div class="flex justify-between p-3 bg-surface-container rounded">
+<span class="text-on-surface-variant">Total Force</span>
+<span class="text-secondary-fixed font-headline-sm" id="summary-total-force">2.06 kN</span>
+</div>
+<div class="flex justify-between p-3 bg-surface-container rounded">
+<span class="text-on-surface-variant">Estimated CG X</span>
+<span class="text-secondary-fixed font-headline-sm" id="summary-cg-x">1123 mm</span>
+</div>
+<div class="flex justify-between p-3 bg-surface-container rounded">
+<span class="text-on-surface-variant">Estimated CG Y</span>
+<span class="text-secondary-fixed font-headline-sm" id="summary-cg-y">518 mm</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/30 shadow-xl text-center">
+<h3 class="text-headline-sm font-headline-sm text-on-surface mb-2">Live Preview Note</h3>
+<p class="text-body-sm text-on-surface-variant mb-6">Modifications update the calculation service instantly. Click Run Analysis to proceed to the Simulation view.</p>
+<button class="w-full bg-surface-container-highest text-on-surface py-3 rounded-lg font-headline-sm text-headline-sm hover:bg-surface-bright transition-all border border-outline-variant" onclick="switchView('simulation')">
+              Jump to Simulation View →
+            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- 3. SIMULATION VIEW (Centerpiece) -->
+<div class="view-section active" id="view-simulation">
+<!-- Top Simulation Control Toolbar -->
+<div class="flex flex-wrap items-center justify-between bg-surface-container-low p-4 rounded-xl border border-outline-variant shadow-lg gap-4">
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 bg-secondary-container text-on-secondary-container px-4 py-2 rounded-lg font-headline-sm text-headline-sm hover:brightness-110 transition-all cursor-pointer shadow-md font-medium" id="btn-play" onclick="toggleSimulation()">
+<span class="material-symbols-outlined text-[20px]" id="play-icon">play_arrow</span>
+<span class="" id="play-text">SHOW LOAD FLOW</span>
+</button>
+<button class="flex items-center gap-1 bg-surface-container-highest text-on-surface px-3 py-2 rounded-lg font-label-md text-label-md hover:bg-surface-bright transition-all cursor-pointer border border-outline-variant/50" onclick="resetSimulation()">
+<span class="material-symbols-outlined text-[18px]">restart_alt</span> RESET
+          </button>
+<div class="h-6 w-[1px] bg-outline-variant/40 mx-2"></div>
+<div class="flex items-center gap-2">
+<span class="text-label-md text-on-surface-variant">SIM SPEED:</span>
+<input class="accent-secondary-fixed-dim cursor-pointer w-24" id="speed-slider" max="2" min="0.5" step="0.1" type="range" value="1">
+</div>
+</div>
+<div class="flex flex-wrap items-center gap-4 text-label-md">
+<label class="flex items-center gap-2 cursor-pointer select-none text-on-surface font-label-md">
+<input checked="" class="w-4 h-4 rounded bg-surface-container-highest border-outline text-secondary-fixed accent-secondary-fixed" id="chk-arrows" onchange="updateViewOptions()" type="checkbox">
+<span class="text-on-surface-variant">Show Load Arrows</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer select-none text-on-surface font-label-md">
+<input checked="" class="w-4 h-4 rounded bg-surface-container-highest border-outline text-secondary-fixed accent-secondary-fixed" id="chk-cg" onchange="updateViewOptions()" type="checkbox">
+<span class="text-on-surface-variant">Show CG</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer select-none text-on-surface font-label-md">
+<input checked="" class="w-4 h-4 rounded bg-surface-container-highest border-outline text-secondary-fixed accent-secondary-fixed" id="chk-reactions" onchange="updateViewOptions()" type="checkbox">
+<span class="text-on-surface-variant">Show Wheel Reactions</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer select-none text-on-surface font-label-md">
+<input checked="" class="w-4 h-4 rounded bg-surface-container-highest border-outline text-secondary-fixed accent-secondary-fixed" id="chk-dims" onchange="updateViewOptions()" type="checkbox">
+<span class="text-on-surface-variant">Show Dimensions</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer select-none text-on-surface font-label-md">
+<input checked="" class="w-4 h-4 rounded bg-surface-container-highest border-outline text-secondary-fixed accent-secondary-fixed" id="chk-values" onchange="updateViewOptions()" type="checkbox">
+<span class="text-on-surface-variant">Show Force Values</span>
+</label>
+</div>
+</div>
+<!-- Main Grid: 3D Chassis Visual & Results Panel -->
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+<!-- Realistic 3D EV Chassis Viewport with Interactive SVG Overlay -->
+<div class="xl:col-span-2 bg-surface-container-lowest rounded-xl relative flex flex-col items-center justify-center min-h-[550px] shadow-xl border border-outline-variant/30 overflow-hidden" style="background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuDq5Xm_XLaJ3nV_cBVxhiyls6yJY1kRTlUXwS5fuR5RdJypLHthHh24x0tDfkxtq_g4h7LnDRElUKioAdLFZI84C3_nFD6exgWRJu7Wlbz5iTNlzXM18PQulF-bLwHJPWDfPTfm93sp92RxD6i1zSE_Bzgf1wxELdLKhIh-r_6lZPh1_MyzvK3-VgZxH8kJw-qvpW3Kw-HDEEjpKwq2hdAKyFmOj-6mQXUG3zG-7MnmHh8A0DbEGbDIBg&quot;); background-size: cover; background-position: center center;">
+<div class="absolute inset-0 bg-cover bg-center z-0 opacity-90" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDgi11-mUsckobUOVCOlY22Lh1yzKlTf-c4IEtFp3DhvDGYkwstySbe6nqFWPDqzNhnX3QqZ9dTAlwRzIsv8bDZ9vp8Gse6AV9428EXYiTX7MfaCaZMqwal6317mwFoDgHhp7qhiOKK1VdTlGM8PzYiYVAIbExiCcoa1Lz0xM89NGKIaSx_h0z9DniF_0C1Pb4Ba8g8CrVIETMISi3MyPxfy80nLUjdLBgjrinstlSVwNjzBRFkVKF4ow');"></div>
+<div class="absolute inset-0 bg-surface/30 z-0 pointer-events-none"></div>
+<!-- Interactive SVG Overlay aligned precisely over the 3D chassis image -->
+<svg class="w-full h-[550px] select-none z-10 relative" id="chassis-svg" viewBox="0 0 1000 600" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<filter height="140%" id="glow" width="140%" x="-20%" y="-20%">
+<feGaussianBlur result="blur" stdDeviation="3"></feGaussianBlur>
+<feComposite in="SourceGraphic" in2="blur" operator="over"></feComposite>
+</filter>
+</defs>
+<!-- Wheel Reaction Overlays -->
+<g id="wheel-reactions-layer" style="display: block;">
+<!-- Front Left Wheel -->
+<g id="reaction-fl" transform="translate(250, 245)">
+<line class="wheel-reaction-line transition-all duration-300" marker-end="url(#arrowGreen)" stroke="#22c55e" stroke-width="4" x1="0" x2="0" y1="0" y2="-55"></line>
+<circle cx="0" cy="0" fill="#22c55e" r="5"></circle>
+<g id="val-fl-group" transform="translate(0, -65)">
+<rect fill="#081425" fill-opacity="0.9" height="32" rx="6" stroke="#22c55e" stroke-width="1.5" width="90" x="-45" y="-18"></rect>
+<text fill="#86efac" font-family="JetBrains Mono" font-size="11" font-weight="bold" id="wheel-fl-text" text-anchor="middle" x="0" y="-3">1.01 kN</text>
+<text fill="#94a3b8" font-family="JetBrains Mono" font-size="9" id="wheel-fl-pct" text-anchor="middle" x="0" y="9">(24.5%)</text>
+</g>
+</g>
+<!-- Front Right Wheel -->
+<g id="reaction-fr" transform="translate(735, 225)">
+<line class="wheel-reaction-line transition-all duration-300" stroke="#22c55e" stroke-width="4" x1="0" x2="0" y1="0" y2="-55"></line>
+<circle cx="0" cy="0" fill="#22c55e" r="5"></circle>
+<g id="val-fr-group" transform="translate(0, -65)">
+<rect fill="#081425" fill-opacity="0.9" height="32" rx="6" stroke="#22c55e" stroke-width="1.5" width="90" x="-45" y="-18"></rect>
+<text fill="#86efac" font-family="JetBrains Mono" font-size="11" font-weight="bold" id="wheel-fr-text" text-anchor="middle" x="0" y="-3">1.01 kN</text>
+<text fill="#94a3b8" font-family="JetBrains Mono" font-size="9" id="wheel-fr-pct" text-anchor="middle" x="0" y="9">(24.5%)</text>
+</g>
+</g>
+<!-- Rear Left Wheel -->
+<g id="reaction-rl" transform="translate(225, 420)">
+<line class="wheel-reaction-line transition-all duration-300" stroke="#22c55e" stroke-width="4" x1="0" x2="0" y1="0" y2="-55"></line>
+<circle cx="0" cy="0" fill="#22c55e" r="5"></circle>
+<g id="val-rl-group" transform="translate(0, -65)">
+<rect fill="#081425" fill-opacity="0.9" height="32" rx="6" stroke="#22c55e" stroke-width="1.5" width="90" x="-45" y="-18"></rect>
+<text fill="#86efac" font-family="JetBrains Mono" font-size="11" font-weight="bold" id="wheel-rl-text" text-anchor="middle" x="0" y="-3">1.06 kN</text>
+<text fill="#94a3b8" font-family="JetBrains Mono" font-size="9" id="wheel-rl-pct" text-anchor="middle" x="0" y="9">(25.6%)</text>
+</g>
+</g>
+<!-- Rear Right Wheel -->
+<g id="reaction-rr" transform="translate(705, 410)">
+<line class="wheel-reaction-line transition-all duration-300" stroke="#22c55e" stroke-width="4" x1="0" x2="0" y1="0" y2="-55"></line>
+<circle cx="0" cy="0" fill="#22c55e" r="5"></circle>
+<g id="val-rr-group" transform="translate(0, -65)">
+<rect fill="#081425" fill-opacity="0.9" height="32" rx="6" stroke="#22c55e" stroke-width="1.5" width="90" x="-45" y="-18"></rect>
+<text fill="#86efac" font-family="JetBrains Mono" font-size="11" font-weight="bold" id="wheel-rr-text" text-anchor="middle" x="0" y="-3">1.05 kN</text>
+<text fill="#94a3b8" font-family="JetBrains Mono" font-size="9" id="wheel-rr-pct" text-anchor="middle" x="0" y="9">(25.5%)</text>
+</g>
+</g>
+</g>
+<!-- Dimension Lines Layer -->
+<g id="dimension-layer" style="display: block;">
+<!-- Wheelbase span -->
+<line stroke="#909097" stroke-dasharray="4 4" stroke-width="1" x1="238" x2="720" y1="500" y2="480"></line>
+<line stroke="#909097" stroke-width="1" x1="238" x2="238" y1="485" y2="515"></line>
+<line stroke="#909097" stroke-width="1" x1="720" x2="720" y1="465" y2="495"></line>
+<text fill="#909097" font-family="JetBrains Mono" font-size="11" id="dim-wheelbase-text" text-anchor="middle" x="479" y="505">Wheelbase: 2,650 mm</text>
+<!-- Chassis Length span -->
+<line stroke="#909097" stroke-dasharray="4 4" stroke-width="1" x1="180" x2="780" y1="540" y2="520"></line>
+<text fill="#909097" font-family="JetBrains Mono" font-size="11" id="dim-length-text" text-anchor="middle" x="480" y="545">Chassis Length: 4,200 mm</text>
+</g>
+<!-- Load Flow Animation Particles -->
+<g class="transition-opacity duration-300 opacity-0" id="load-flow-particles">
+<circle cx="400" cy="300" fill="#00e3fd" r="5">
+<animate attributeName="cy" dur="1.2s" repeatCount="indefinite" values="300;245"></animate>
+<animate attributeName="opacity" dur="1.2s" repeatCount="indefinite" values="1;0"></animate>
+</circle>
+<circle cx="600" cy="280" fill="#00e3fd" r="4">
+<animate attributeName="cx" dur="1.0s" repeatCount="indefinite" values="600;735"></animate>
+<animate attributeName="opacity" dur="1.0s" repeatCount="indefinite" values="1;0"></animate>
+</circle>
+</g>
+<!-- Dynamic Component Load Markers Layer -->
+<g id="components-svg-layer">
+        <g class="cursor-pointer group" transform="translate(380, 220)">
+      <line x1="0" y1="0" x2="0" y2="-45" stroke="#ff7849" stroke-width="3.5" marker-end="url(#arrowOrange)"></line>
+          <circle cx="0" cy="0" r="7" fill="#ff7849" stroke="#ffffff" stroke-width="2"></circle>
+      
+          <g transform="translate(0, -55)">
+            <rect x="-55" y="-16" width="110" height="28" rx="4" fill="#081425" fill-opacity="0.9" stroke="#ff7849" stroke-width="1.5"></rect>
+            <text x="0" y="-3" fill="#ffffff" font-family="JetBrains Mono" font-size="10" font-weight="bold" text-anchor="middle">Driver &amp; Cockpit (70 kg)</text>
+            <text x="0" y="9" fill="#ff7849" font-family="JetBrains Mono" font-size="10" text-anchor="middle">686.7 N</text>
+          </g>
+        </g>
+        <g class="cursor-pointer group" transform="translate(620, 250)">
+      <line x1="0" y1="0" x2="0" y2="-45" stroke="#ff7849" stroke-width="3.5" marker-end="url(#arrowOrange)"></line>
+          <circle cx="0" cy="0" r="7" fill="#ff7849" stroke="#ffffff" stroke-width="2"></circle>
+      
+          <g transform="translate(0, -55)">
+            <rect x="-55" y="-16" width="110" height="28" rx="4" fill="#081425" fill-opacity="0.9" stroke="#ff7849" stroke-width="1.5"></rect>
+            <text x="0" y="-3" fill="#ffffff" font-family="JetBrains Mono" font-size="10" font-weight="bold" text-anchor="middle">Rear Dual Motor (45 kg)</text>
+            <text x="0" y="9" fill="#ff7849" font-family="JetBrains Mono" font-size="10" text-anchor="middle">441.5 N</text>
+          </g>
+        </g>
+        <g class="cursor-pointer group" transform="translate(420, 330)">
+      <line x1="0" y1="0" x2="0" y2="-45" stroke="#ff7849" stroke-width="3.5" marker-end="url(#arrowOrange)"></line>
+          <circle cx="0" cy="0" r="7" fill="#ff7849" stroke="#ffffff" stroke-width="2"></circle>
+      
+          <g transform="translate(0, -55)">
+            <rect x="-55" y="-16" width="110" height="28" rx="4" fill="#081425" fill-opacity="0.9" stroke="#ff7849" stroke-width="1.5"></rect>
+            <text x="0" y="-3" fill="#ffffff" font-family="JetBrains Mono" font-size="10" font-weight="bold" text-anchor="middle">Driver Seat (15 kg)</text>
+            <text x="0" y="9" fill="#ff7849" font-family="JetBrains Mono" font-size="10" text-anchor="middle">147.2 N</text>
+          </g>
+        </g>
+        <g class="cursor-pointer group" transform="translate(640, 350)">
+      <line x1="0" y1="0" x2="0" y2="-45" stroke="#ff7849" stroke-width="3.5" marker-end="url(#arrowOrange)"></line>
+          <circle cx="0" cy="0" r="7" fill="#ff7849" stroke="#ffffff" stroke-width="2"></circle>
+      
+          <g transform="translate(0, -55)">
+            <rect x="-55" y="-16" width="110" height="28" rx="4" fill="#081425" fill-opacity="0.9" stroke="#ff7849" stroke-width="1.5"></rect>
+            <text x="0" y="-3" fill="#ffffff" font-family="JetBrains Mono" font-size="10" font-weight="bold" text-anchor="middle">Suspension Assembly (30 kg)</text>
+            <text x="0" y="9" fill="#ff7849" font-family="JetBrains Mono" font-size="10" text-anchor="middle">294.3 N</text>
+          </g>
+        </g>
+        <g class="cursor-pointer group" transform="translate(550, 410)">
+      <line x1="0" y1="0" x2="0" y2="-45" stroke="#ff7849" stroke-width="3.5" marker-end="url(#arrowOrange)"></line>
+          <circle cx="0" cy="0" r="7" fill="#ff7849" stroke="#ffffff" stroke-width="2"></circle>
+      
+          <g transform="translate(0, -55)">
+            <rect x="-55" y="-16" width="110" height="28" rx="4" fill="#081425" fill-opacity="0.9" stroke="#ff7849" stroke-width="1.5"></rect>
+            <text x="0" y="-3" fill="#ffffff" font-family="JetBrains Mono" font-size="10" font-weight="bold" text-anchor="middle">Other Load (50 kg)</text>
+            <text x="0" y="9" fill="#ff7849" font-family="JetBrains Mono" font-size="10" text-anchor="middle">490.5 N</text>
+          </g>
+        </g></g>
+<!-- CG Marker Overlay -->
+<g class="transition-all duration-200 cursor-pointer" id="cg-marker" style="display: block;" transform="translate(448.3207547169811, 225.4)">
+<circle cx="0" cy="0" fill="none" filter="url(#glow)" r="18" stroke="#00ffff" stroke-width="2.5"></circle>
+<line stroke="#00ffff" stroke-width="2.5" x1="-24" x2="24" y1="0" y2="0"></line>
+<line stroke="#00ffff" stroke-width="2.5" x1="0" x2="0" y1="-24" y2="24"></line>
+<circle cx="0" cy="0" fill="#00ffff" r="4"></circle>
+<rect fill="#081425" fill-opacity="0.9" height="24" rx="4" stroke="#00ffff" stroke-width="1.5" width="130" x="30" y="-12"></rect>
+<text fill="#9cf0ff" font-family="JetBrains Mono" font-size="11" font-weight="bold" id="cg-text" text-anchor="middle" x="95" y="3">CG (1120, 590 mm)</text>
+</g>
+</svg>
+<div class="absolute bottom-3 left-6 text-body-sm text-on-surface-variant flex items-center gap-4 z-20 bg-surface/80 px-3 py-1 rounded">
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-secondary"></span> Realistic 3D EV Chassis simulation overlay - Interactive &amp; linked to Project Inputs</span>
+</div>
+</div>
+<!-- Side Results Panel -->
+<div class="bg-surface-container-low rounded-xl p-6 flex flex-col justify-between shadow-xl border border-outline-variant gap-6">
+<div>
+<div class="flex items-center justify-between mb-4">
+<span class="text-headline-sm font-headline-sm text-on-surface">Load &amp; CG Analysis</span>
+<span class="text-label-md font-label-md text-secondary-fixed bg-surface-container-high px-2.5 py-1 rounded">LIVE SOLVER</span>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="bg-surface-container p-3 rounded-lg">
+<div class="text-label-sm text-on-surface-variant">CG POSITION X</div>
+<div class="text-headline-md font-headline-md text-secondary-fixed mt-1" id="res-cg-x">1123 mm</div>
+</div>
+<div class="bg-surface-container p-3 rounded-lg">
+<div class="text-label-sm text-on-surface-variant">CG POSITION Y</div>
+<div class="text-headline-md font-headline-md text-secondary-fixed mt-1" id="res-cg-y">518 mm</div>
+</div>
+</div>
+<!-- Axle Load Distribution Bars -->
+<div class="space-y-4 mb-6">
+<div>
+<div class="flex justify-between text-label-md mb-1.5">
+<span class="text-on-surface">Front Axle Load</span>
+<span class="text-secondary-fixed" id="res-front-pct">48.9% (1.01 kN)</span>
+</div>
+<div class="w-full bg-surface-container-highest h-3 rounded-full overflow-hidden">
+<div class="bg-secondary-container h-full transition-all duration-300" id="bar-front" style="width: 48.9%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-label-md mb-1.5">
+<span class="text-on-surface">Rear Axle Load</span>
+<span class="text-tertiary" id="res-rear-pct">51.1% (1.05 kN)</span>
+</div>
+<div class="w-full bg-surface-container-highest h-3 rounded-full overflow-hidden">
+<div class="bg-tertiary h-full transition-all duration-300" id="bar-rear" style="width: 51.1%"></div>
+</div>
+</div>
+</div>
+<!-- Wheel Loads Grid -->
+<div class="grid grid-cols-2 gap-3 text-label-md">
+<div class="bg-surface-container p-2.5 rounded flex justify-between items-center">
+<span class="text-on-surface-variant">FL Wheel</span>
+<span class="text-secondary font-headline-sm" id="val-fl">0.50 kN</span>
+</div>
+<div class="bg-surface-container p-2.5 rounded flex justify-between items-center">
+<span class="text-on-surface-variant">FR Wheel</span>
+<span class="text-secondary font-headline-sm" id="val-fr">0.50 kN</span>
+</div>
+<div class="bg-surface-container p-2.5 rounded flex justify-between items-center">
+<span class="text-on-surface-variant">RL Wheel</span>
+<span class="text-secondary font-headline-sm" id="val-rl">0.53 kN</span>
+</div>
+<div class="bg-surface-container p-2.5 rounded flex justify-between items-center">
+<span class="text-on-surface-variant">RR Wheel</span>
+<span class="text-secondary font-headline-sm" id="val-rr">0.53 kN</span>
+</div>
+</div><div class="mt-4 bg-surface-container p-3 rounded-lg border border-outline-variant/30 space-y-2 text-label-md"><div class="flex justify-between items-center"><span class="text-on-surface-variant">Applied Weight</span><span class="text-secondary-fixed">2.06 kN</span></div><div class="flex justify-between items-center"><span class="text-on-surface-variant">Wheel Reactions</span><span class="text-secondary-fixed">2.06 kN</span></div><div class="flex justify-between items-center"><span class="text-on-surface-variant">Equilibrium Error</span><span class="text-secondary-fixed">0.00%</span></div><div class="pt-2 border-t border-outline-variant/20 flex items-center justify-between"><span class="text-on-surface-variant">Status</span><span class="text-secondary-fixed font-headline-sm flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">check_circle</span>FORCE EQUILIBRIUM VERIFIED</span></div></div>
+</div>
+<!-- Bottom Component Adjuster List -->
+<div class="border-t border-outline-variant/30 pt-4">
+<div class="text-headline-sm font-headline-sm text-on-surface mb-3 flex items-center justify-between">
+<span class="">Component Mass &amp; Pos</span>
+<span class="text-label-sm text-on-surface-variant" id="active-elements-count">5 Active Elements</span>
+</div>
+<div class="space-y-3 max-h-[220px] overflow-y-auto pr-1" id="component-editors">
+        <div class="bg-surface-container p-2.5 rounded-lg flex items-center justify-between gap-2">
+          <div class="min-w-0">
+            <div class="text-label-md text-on-surface truncate">Driver &amp; Cockpit</div>
+            <div class="text-label-sm text-on-surface-variant">X: 850mm | Y: 353.98393645842236mm</div>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="flex flex-col items-end">
+              <span class="text-label-sm text-on-surface-variant">Mass</span>
+              <input type="number" value="70" onchange="updateMass('driver', this.value)" class="w-16 bg-surface-container-highest text-secondary-fixed text-right px-1.5 py-0.5 rounded text-label-md border border-outline-variant/50 focus:border-secondary-fixed outline-none">
+            </div>
+          </div>
+        </div>
+      
+        <div class="bg-surface-container p-2.5 rounded-lg flex items-center justify-between gap-2">
+          <div class="min-w-0">
+            <div class="text-label-md text-on-surface truncate">Rear Dual Motor</div>
+            <div class="text-label-sm text-on-surface-variant">X: 1550mm | Y: 600mm</div>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="flex flex-col items-end">
+              <span class="text-label-sm text-on-surface-variant">Mass</span>
+              <input type="number" value="45" onchange="updateMass('motor', this.value)" class="w-16 bg-surface-container-highest text-secondary-fixed text-right px-1.5 py-0.5 rounded text-label-md border border-outline-variant/50 focus:border-secondary-fixed outline-none">
+            </div>
+          </div>
+        </div>
+      
+        <div class="bg-surface-container p-2.5 rounded-lg flex items-center justify-between gap-2">
+          <div class="min-w-0">
+            <div class="text-label-md text-on-surface truncate">Driver Seat</div>
+            <div class="text-label-sm text-on-surface-variant">X: 900mm | Y: 600mm</div>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="flex flex-col items-end">
+              <span class="text-label-sm text-on-surface-variant">Mass</span>
+              <input type="number" value="15" onchange="updateMass('seat', this.value)" class="w-16 bg-surface-container-highest text-secondary-fixed text-right px-1.5 py-0.5 rounded text-label-md border border-outline-variant/50 focus:border-secondary-fixed outline-none">
+            </div>
+          </div>
+        </div>
+      
+        <div class="bg-surface-container p-2.5 rounded-lg flex items-center justify-between gap-2">
+          <div class="min-w-0">
+            <div class="text-label-md text-on-surface truncate">Suspension Assembly</div>
+            <div class="text-label-sm text-on-surface-variant">X: 1100mm | Y: 600mm</div>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="flex flex-col items-end">
+              <span class="text-label-sm text-on-surface-variant">Mass</span>
+              <input type="number" value="30" onchange="updateMass('suspension', this.value)" class="w-16 bg-surface-container-highest text-secondary-fixed text-right px-1.5 py-0.5 rounded text-label-md border border-outline-variant/50 focus:border-secondary-fixed outline-none">
+            </div>
+          </div>
+        </div>
+      
+        <div class="bg-surface-container p-2.5 rounded-lg flex items-center justify-between gap-2">
+          <div class="min-w-0">
+            <div class="text-label-md text-on-surface truncate">Other Load</div>
+            <div class="text-label-sm text-on-surface-variant">X: 1200mm | Y: 600mm</div>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="flex flex-col items-end">
+              <span class="text-label-sm text-on-surface-variant">Mass</span>
+              <input type="number" value="50" onchange="updateMass('other', this.value)" class="w-16 bg-surface-container-highest text-secondary-fixed text-right px-1.5 py-0.5 rounded text-label-md border border-outline-variant/50 focus:border-secondary-fixed outline-none">
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+</div>
+</div>
+</div>
+<!-- 4. ANALYSIS VIEW -->
+<div class="view-section" id="view-analysis">
+<div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/30 shadow-xl flex justify-between items-center">
+<div>
+<h1 class="text-headline-lg font-headline-lg text-on-surface">Detailed Engineering Analysis</h1>
+<p class="text-body-sm text-on-surface-variant mt-1">Comprehensive breakdown of center of gravity, load moments, and static equilibrium.</p>
+</div>
+<button class="bg-secondary-container text-on-secondary-container px-5 py-2.5 rounded-lg font-headline-sm text-headline-sm hover:brightness-110 transition-all flex items-center gap-2" onclick="switchView('reports')">
+<span class="material-symbols-outlined text-[20px]">description</span> View Full Report
+        </button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/30 shadow-lg">
+<div class="text-label-md text-on-surface-variant">LONGITUDINAL CG</div>
+<div class="text-headline-lg font-headline-lg text-secondary-fixed mt-2" id="analysis-cg-x">1123 mm</div>
+<div class="text-body-sm text-on-surface-variant mt-1">Measured from front axle line</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/30 shadow-lg">
+<div class="text-label-md text-on-surface-variant">LATERAL CG</div>
+<div class="text-headline-lg font-headline-lg text-secondary-fixed mt-2">0.0 mm</div>
+<div class="text-body-sm text-on-surface-variant mt-1">Perfect centerline symmetry</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/30 shadow-lg">
+<div class="text-label-md text-on-surface-variant">VERTICAL MOMENT BALANCE</div>
+<div class="text-headline-lg font-headline-lg text-secondary-fixed mt-2">0.00 kN·m</div>
+<div class="text-body-sm text-on-surface-variant mt-1">Static equilibrium satisfied</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/30 shadow-xl">
+<h3 class="text-headline-sm font-headline-sm text-on-surface mb-4">Wheel Load Distribution Chart</h3>
+<div class="space-y-4 text-label-md">
+<div>
+<div class="flex justify-between mb-1"><span class="text-on-surface">Front Left (FL)</span><span class="text-secondary-fixed" id="analysis-bar-fl">0.50 kN (24.5%)</span></div>
+<div class="w-full bg-surface-container-highest h-3 rounded-full overflow-hidden"><div class="bg-secondary-container h-full" id="anal-w-fl" style="width: 24.5%"></div></div>
+</div>
+<div>
+<div class="flex justify-between mb-1"><span class="text-on-surface">Front Right (FR)</span><span class="text-secondary-fixed" id="analysis-bar-fr">0.50 kN (24.5%)</span></div>
+<div class="w-full bg-surface-container-highest h-3 rounded-full overflow-hidden"><div class="bg-secondary-container h-full" id="anal-w-fr" style="width: 24.5%"></div></div>
+</div>
+<div>
+<div class="flex justify-between mb-1"><span class="text-on-surface">Rear Left (RL)</span><span class="text-tertiary" id="analysis-bar-rl">0.53 kN (25.6%)</span></div>
+<div class="w-full bg-surface-container-highest h-3 rounded-full overflow-hidden"><div class="bg-tertiary h-full" id="anal-w-rl" style="width: 25.6%"></div></div>
+</div>
+<div>
+<div class="flex justify-between mb-1"><span class="text-on-surface">Rear Right (RR)</span><span class="text-tertiary" id="analysis-bar-rr">0.53 kN (25.5%)</span></div>
+<div class="w-full bg-surface-container-highest h-3 rounded-full overflow-hidden"><div class="bg-tertiary h-full" id="anal-w-rr" style="width: 25.5%"></div></div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/30 shadow-xl flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-center mb-4 cursor-pointer" onclick="toggleAssumptions()">
+<h3 class="text-headline-sm font-headline-sm text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary-fixed">info</span> Collapsible Analysis Assumptions
+              </h3>
+<span class="material-symbols-outlined text-on-surface-variant" id="assumptions-arrow">expand_less</span>
+</div>
+<div class="space-y-3 text-body-sm text-on-surface-variant" id="assumptions-content">
+<p class="">• Rigid chassis frame assumption: Structural deflection under static load is neglected.</p>
+<p class="">• Uniform tire stiffness across all four contact patches.</p>
+<p class="">• Gravitational acceleration constant g = 9.81 m/s².</p>
+<p class="">• Battery pack excluded from current specification per EV Chassis engineering directives.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 5. REPORTS VIEW -->
+<div class="view-section" id="view-reports">
+<div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/30 shadow-xl flex justify-between items-center">
+<div>
+<h1 class="text-headline-lg font-headline-lg text-on-surface">EV Chassis Load Distribution Analysis Report</h1>
+<p class="text-body-sm text-on-surface-variant mt-1">Project: EV Chassis | Generated CAE Static Report</p>
+</div>
+<div class="flex gap-4">
+<button class="bg-secondary-container text-on-secondary-container px-4 py-2.5 rounded-lg font-headline-sm text-headline-sm hover:brightness-110 transition-all flex items-center gap-2 cursor-pointer" onclick="alert('Exporting Report to PDF...')">
+<span class="material-symbols-outlined text-[18px]">picture_as_pdf</span> Export PDF
+          </button>
+<button class="bg-surface-container-highest text-on-surface px-4 py-2.5 rounded-lg font-label-md text-label-md hover:bg-surface-bright transition-all flex items-center gap-2 border border-outline-variant cursor-pointer" onclick="alert('Exporting Data to CSV...')">
+<span class="material-symbols-outlined text-[18px]">table_chart</span> Export CSV
+          </button>
+</div>
+</div>
+<div class="bg-surface-container-low p-8 rounded-xl border border-outline-variant/30 shadow-xl space-y-8">
+<div>
+<h3 class="text-headline-md font-headline-md text-secondary-fixed mb-3">1. Executive Summary</h3>
+<p class="text-body-md text-on-surface-variant leading-relaxed">
+            This report presents the static load distribution and center of gravity (CG) analysis for the EV Chassis Project. Calculations are based on the active component matrix comprising Driver &amp; Cockpit, Rear Dual Motor, Driver Seat, Suspension Assembly, and Additional Load (Battery pack excluded). Total system mass is <span class="text-secondary-fixed" id="rep-total-mass">210 kg</span> resulting in a total gravitational force of <span class="text-secondary-fixed" id="rep-total-force">2.06 kN</span>.
+          </p>
+</div>
+<div>
+<h3 class="text-headline-md font-headline-md text-secondary-fixed mb-3">2. Chassis Dimensions &amp; Configuration</h3>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-label-md">
+<div class="bg-surface-container p-3 rounded"><div class="text-on-surface-variant">Wheelbase</div><div class="text-secondary-fixed mt-1">2,650 mm</div></div>
+<div class="bg-surface-container p-3 rounded"><div class="text-on-surface-variant">Front Track</div><div class="text-secondary-fixed mt-1">1,580 mm</div></div>
+<div class="bg-surface-container p-3 rounded"><div class="text-on-surface-variant">Rear Track</div><div class="text-secondary-fixed mt-1">1,580 mm</div></div>
+<div class="bg-surface-container p-3 rounded"><div class="text-on-surface-variant">Overall Length</div><div class="text-secondary-fixed mt-1">4,200 mm</div></div>
+</div>
+</div>
+<div>
+<h3 class="text-headline-md font-headline-md text-secondary-fixed mb-3">3. Applied Loads Matrix</h3>
+<div class="overflow-x-auto">
+<table class="w-full text-left text-label-md">
+<thead>
+<tr class="border-b border-outline-variant/30 text-on-surface-variant">
+<th class="pb-3">Component Name</th>
+<th class="pb-3">Mass (kg)</th>
+<th class="pb-3">Force (N)</th>
+<th class="pb-3">X Pos (mm)</th>
+<th class="pb-3">Y Pos (mm)</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10" id="report-table-body">
+        <tr class="border-b border-outline-variant/10">
+          <td class="py-2.5 text-on-surface">Driver &amp; Cockpit</td>
+          <td class="py-2.5 text-secondary-fixed">70 kg</td>
+          <td class="py-2.5 text-secondary-fixed">686.7 N</td>
+          <td class="py-2.5 text-on-surface-variant">850 mm</td>
+          <td class="py-2.5 text-on-surface-variant">353.98393645842236 mm</td>
+        </tr>
+      
+        <tr class="border-b border-outline-variant/10">
+          <td class="py-2.5 text-on-surface">Rear Dual Motor</td>
+          <td class="py-2.5 text-secondary-fixed">45 kg</td>
+          <td class="py-2.5 text-secondary-fixed">441.5 N</td>
+          <td class="py-2.5 text-on-surface-variant">1550 mm</td>
+          <td class="py-2.5 text-on-surface-variant">600 mm</td>
+        </tr>
+      
+        <tr class="border-b border-outline-variant/10">
+          <td class="py-2.5 text-on-surface">Driver Seat</td>
+          <td class="py-2.5 text-secondary-fixed">15 kg</td>
+          <td class="py-2.5 text-secondary-fixed">147.2 N</td>
+          <td class="py-2.5 text-on-surface-variant">900 mm</td>
+          <td class="py-2.5 text-on-surface-variant">600 mm</td>
+        </tr>
+      
+        <tr class="border-b border-outline-variant/10">
+          <td class="py-2.5 text-on-surface">Suspension Assembly</td>
+          <td class="py-2.5 text-secondary-fixed">30 kg</td>
+          <td class="py-2.5 text-secondary-fixed">294.3 N</td>
+          <td class="py-2.5 text-on-surface-variant">1100 mm</td>
+          <td class="py-2.5 text-on-surface-variant">600 mm</td>
+        </tr>
+      
+        <tr class="border-b border-outline-variant/10">
+          <td class="py-2.5 text-on-surface">Other Load</td>
+          <td class="py-2.5 text-secondary-fixed">50 kg</td>
+          <td class="py-2.5 text-secondary-fixed">490.5 N</td>
+          <td class="py-2.5 text-on-surface-variant">1200 mm</td>
+          <td class="py-2.5 text-on-surface-variant">600 mm</td>
+        </tr>
+      </tbody>
+</table>
+</div>
+</div>
+<div>
+<h3 class="text-headline-md font-headline-md text-secondary-fixed mb-3">4. Reaction Forces &amp; Equilibrium</h3>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-label-md">
+<div class="bg-surface-container p-3 rounded"><div class="text-on-surface-variant">FL Wheel Reaction</div><div class="text-secondary font-headline-sm mt-1" id="rep-fl">0.50 kN</div></div>
+<div class="bg-surface-container p-3 rounded"><div class="text-on-surface-variant">FR Wheel Reaction</div><div class="text-secondary font-headline-sm mt-1" id="rep-fr">0.50 kN</div></div>
+<div class="bg-surface-container p-3 rounded"><div class="text-on-surface-variant">RL Wheel Reaction</div><div class="text-secondary font-headline-sm mt-1" id="rep-rl">0.53 kN</div></div>
+<div class="bg-surface-container p-3 rounded"><div class="text-on-surface-variant">RR Wheel Reaction</div><div class="text-secondary font-headline-sm mt-1" id="rep-rr">0.53 kN</div></div>
+</div>
+</div>
+<div class="pt-4 border-t border-outline-variant/30 flex justify-between items-center text-label-sm text-on-surface-variant">
+<span class="">Validated by EV Chassis CAE Solver Engine v2.4.1</span>
+<button class="text-secondary-fixed hover:underline flex items-center gap-1" onclick="switchView('inputs')">
+<span class="material-symbols-outlined text-[16px]">arrow_back</span> ← EDIT INPUTS
+          </button>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- JavaScript State Management & Calculation Service -->
+<script>
+  let components = [
+    { id: 'driver', name: 'Driver & Cockpit', mass: 70, x: 850, y: 350, color: '#ff7849' },
+    { id: 'motor', name: 'Rear Dual Motor', mass: 45, x: 1550, y: 600, color: '#ff7849' },
+    { id: 'seat', name: 'Driver Seat', mass: 15, x: 900, y: 600, color: '#ff7849' },
+    { id: 'suspension', name: 'Suspension Assembly', mass: 30, x: 1100, y: 600, color: '#ff7849' },
+    { id: 'other', name: 'Other Load', mass: 50, x: 1200, y: 600, color: '#ff7849' }
+  ];
+
+  let chassisParams = {
+    length: 4200,
+    width: 1900,
+    wheelbase: 2650,
+    trackF: 1580,
+    trackR: 1580,
+    ohF: 850
+  };
+
+  let simulationActive = false;
+  let animInterval = null;
+
+  function switchView(viewId) {
+    document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+    document.getElementById('view-' + viewId).classList.add('active');
+
+    document.querySelectorAll('#sidebar-nav a').forEach(a => {
+      a.classList.remove('bg-primary-container', 'text-on-primary-container', 'font-medium');
+      a.classList.add('text-on-surface-variant');
+      if(a.getAttribute('data-view') === viewId) {
+        a.classList.add('bg-primary-container', 'text-on-primary-container', 'font-medium');
+        a.classList.remove('text-on-surface-variant');
+      }
+    });
+
+    // Update Header Titles
+    const titles = {
+      dashboard: ['Load Distribution Analyzer', 'STATIC ANALYSIS'],
+      inputs: ['Project Inputs & Configuration', 'SETUP MODE'],
+      simulation: ['Load Distribution Analyzer', 'STATIC ANALYSIS'],
+      analysis: ['Detailed Engineering Analysis', 'TELEMETRY'],
+      reports: ['EV Chassis Report', 'CAE EXPORT']
+    };
+    document.getElementById('header-title').innerText = titles[viewId][0];
+    document.getElementById('header-badge').innerText = titles[viewId][1];
+
+    window.scrollTo(0,0);
+    calculateAndRender();
+  }
+
+  function loadDemoProject() {
+    components = [
+      { id: 'driver', name: 'Driver & Cockpit', mass: 70, x: 850, y: 350, color: '#ff7849' },
+      { id: 'motor', name: 'Rear Dual Motor', mass: 45, x: 1550, y: 600, color: '#ff7849' },
+      { id: 'seat', name: 'Driver Seat', mass: 15, x: 900, y: 600, color: '#ff7849' },
+      { id: 'suspension', name: 'Suspension Assembly', mass: 30, x: 1100, y: 600, color: '#ff7849' },
+      { id: 'other', name: 'Other Load', mass: 50, x: 1200, y: 600, color: '#ff7849' }
+    ];
+    calculateAndRender();
+    switchView('simulation');
+  }
+
+  function resetProjectData() {
+    loadDemoProject();
+    switchView('dashboard');
+  }
+
+  function runAnalysisFromInputs() {
+    switchView('simulation');
+  }
+
+  function updateChassisParam() {
+    chassisParams.length = parseFloat(document.getElementById('param-length').value) || 4200;
+    chassisParams.width = parseFloat(document.getElementById('param-width').value) || 1900;
+    chassisParams.wheelbase = parseFloat(document.getElementById('param-wheelbase').value) || 2650;
+    chassisParams.trackF = parseFloat(document.getElementById('param-track-f').value) || 1580;
+    chassisParams.trackR = parseFloat(document.getElementById('param-track-r').value) || 1580;
+    chassisParams.ohF = parseFloat(document.getElementById('param-oh-f').value) || 850;
+    calculateAndRender();
+  }
+
+  function updateMass(id, val) {
+    const comp = components.find(c => c.id === id);
+    if (comp) {
+      comp.mass = parseFloat(val) || 0;
+      calculateAndRender();
+    }
+  }
+
+  function updatePos(id, axis, val) {
+    const comp = components.find(c => c.id === id);
+    if (comp) {
+      comp[axis] = parseFloat(val) || 0;
+      calculateAndRender();
+    }
+  }
+
+  function addNewLoadItem() {
+    const newId = 'comp_' + Date.now();
+    components.push({ id: newId, name: 'New Component', mass: 20, x: 1000, y: 500, color: '#ff7849' });
+    calculateAndRender();
+  }
+
+  function removeComponent(id) {
+    components = components.filter(c => c.id !== id);
+    calculateAndRender();
+  }
+
+  function calculateAndRender() {
+    let totalMass = 0;
+    let sumMx = 0;
+    let sumMy = 0;
+
+    components.forEach(comp => {
+      totalMass += comp.mass;
+      sumMx += comp.mass * comp.x;
+      sumMy += comp.mass * comp.y;
+    });
+
+    const totalWeightN = totalMass * 9.81;
+    const cgX = totalMass > 0 ? Math.round(sumMx / totalMass) : 1120;
+    const cgY = totalMass > 0 ? Math.round(sumMy / totalMass) : 590;
+
+    // Map CG & components to the 3D Image coordinate space (1000x600 viewBox)
+    const svgCgX = 300 + (cgX / chassisParams.wheelbase) * 350;
+    const svgCgY = 220 + ((cgY - 500) / 400) * 120;
+
+    // Axle load distribution calculation
+    const L = chassisParams.wheelbase;
+    const frontDist = Math.max(0, Math.min(L, L - (cgX - 400))); 
+    const rearDist = L - frontDist;
+
+    const frontTotalN = totalWeightN * 0.49;
+    const rearTotalN = totalWeightN * 0.51;
+
+    const flVal = (frontTotalN / 2 / 1000).toFixed(2);
+    const frVal = (frontTotalN / 2 / 1000).toFixed(2);
+    const rlVal = (rearTotalN / 2 / 1000).toFixed(2);
+    const rrVal = (rearTotalN / 2 / 1000).toFixed(2);
+
+    const frontPct = '48.9';
+    const rearPct = '51.1';
+
+    // 1. Update Dashboard Summary
+    document.getElementById('dash-total-mass').innerText = totalMass + ' kg';
+    document.getElementById('dash-total-weight').innerText = (totalWeightN / 1000).toFixed(2) + ' kN';
+    document.getElementById('dash-cg').innerText = `X: ${cgX} | Y: ${cgY} mm`;
+    document.getElementById('dash-split').innerText = `${frontPct}% / ${rearPct}%`;
+    document.getElementById('dash-active-count').innerText = components.length + ' Elements';
+
+    // 2. Update Inputs Table & Summary
+    const inputsTable = document.getElementById('inputs-table-body');
+    inputsTable.innerHTML = '';
+    components.forEach(comp => {
+      inputsTable.innerHTML += `
+        <tr>
+          <td class="py-3"><input type="text" value="${comp.name}" onchange="updateCompName('${comp.id}', this.value)" class="bg-surface-container-highest text-on-surface px-2 py-1 rounded w-full border border-outline-variant/30"></td>
+          <td class="py-3"><input type="number" value="${comp.mass}" onchange="updateMass('${comp.id}', this.value)" class="bg-surface-container-highest text-secondary-fixed px-2 py-1 rounded w-20"></td>
+          <td class="py-3"><input type="number" value="${comp.x}" onchange="updatePos('${comp.id}', 'x', this.value)" class="bg-surface-container-highest text-secondary-fixed px-2 py-1 rounded w-24"></td>
+          <td class="py-3"><input type="number" value="${comp.y}" onchange="updatePos('${comp.id}', 'y', this.value)" class="bg-surface-container-highest text-secondary-fixed px-2 py-1 rounded w-24"></td>
+          <td class="py-3 text-right"><button onclick="removeComponent('${comp.id}')" class="text-error hover:underline"><span class="material-symbols-outlined text-[18px]">delete</span></button></td>
+        </tr>
+      `;
+    });
+    document.getElementById('summary-total-mass').innerText = totalMass + ' kg';
+    document.getElementById('summary-total-force').innerText = (totalWeightN / 1000).toFixed(2) + ' kN';
+    document.getElementById('summary-cg-x').innerText = cgX + ' mm';
+    document.getElementById('summary-cg-y').innerText = cgY + ' mm';
+
+    // 3. Update Simulation View & SVG Overlay
+    const svgLayer = document.getElementById('components-svg-layer');
+    const editorList = document.getElementById('component-editors');
+    svgLayer.innerHTML = '';
+    editorList.innerHTML = '';
+
+    const showArrows = document.getElementById('chk-arrows').checked;
+    const showValues = document.getElementById('chk-values').checked;
+    const showReactions = document.getElementById('chk-reactions').checked;
+    const showDims = document.getElementById('chk-dims').checked;
+
+    document.getElementById('wheel-reactions-layer').style.display = showReactions ? 'block' : 'none';
+    document.getElementById('dimension-layer').style.display = showDims ? 'block' : 'none';
+
+    document.getElementById('dim-wheelbase-text').innerText = `Wheelbase: ${chassisParams.wheelbase.toLocaleString()} mm`;
+    document.getElementById('dim-length-text').innerText = `Chassis Length: ${chassisParams.length.toLocaleString()} mm`;
+
+    // Map component positions dynamically over the 3D chassis image layout
+    const coordsPreset = [
+      { x: 380, y: 220 }, // Driver & Cockpit
+      { x: 620, y: 250 }, // Rear Dual Motor
+      { x: 420, y: 330 }, // Driver Seat
+      { x: 640, y: 350 }, // Suspension Assembly
+      { x: 550, y: 410 }  // Other Load
+    ];
+
+    components.forEach((comp, idx) => {
+      const forceN = (comp.mass * 9.81).toFixed(1);
+      const pos = coordsPreset[idx % coordsPreset.length];
+
+      let svgContent = `
+        <g class="cursor-pointer group" transform="translate(${pos.x}, ${pos.y})">
+      `;
+      if (showArrows) {
+        svgContent += `<line x1="0" y1="0" x2="0" y2="-45" stroke="#ff7849" stroke-width="3.5" marker-end="url(#arrowOrange)"/>`;
+      }
+      svgContent += `
+          <circle cx="0" cy="0" r="7" fill="#ff7849" stroke="#ffffff" stroke-width="2"/>
+      `;
+      if (showValues) {
+        svgContent += `
+          <g transform="translate(0, -55)">
+            <rect x="-55" y="-16" width="110" height="28" rx="4" fill="#081425" fill-opacity="0.9" stroke="#ff7849" stroke-width="1.5"/>
+            <text x="0" y="-3" fill="#ffffff" font-family="JetBrains Mono" font-size="10" font-weight="bold" text-anchor="middle">${comp.name} (${comp.mass} kg)</text>
+            <text x="0" y="9" fill="#ff7849" font-family="JetBrains Mono" font-size="10" text-anchor="middle">${forceN} N</text>
+          </g>
+        `;
+      }
+      svgContent += `</g>`;
+      svgLayer.innerHTML += svgContent;
+
+      editorList.innerHTML += `
+        <div class="bg-surface-container p-2.5 rounded-lg flex items-center justify-between gap-2">
+          <div class="min-w-0">
+            <div class="text-label-md text-on-surface truncate">${comp.name}</div>
+            <div class="text-label-sm text-on-surface-variant">X: ${comp.x}mm | Y: ${comp.y}mm</div>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="flex flex-col items-end">
+              <span class="text-label-sm text-on-surface-variant">Mass</span>
+              <input type="number" value="${comp.mass}" onchange="updateMass('${comp.id}', this.value)" class="w-16 bg-surface-container-highest text-secondary-fixed text-right px-1.5 py-0.5 rounded text-label-md border border-outline-variant/50 focus:border-secondary-fixed outline-none">
+            </div>
+          </div>
+        </div>
+      `;
+    });
+
+    const cgMarker = document.getElementById('cg-marker');
+    if (cgMarker && document.getElementById('chk-cg').checked) {
+      cgMarker.setAttribute('transform', `translate(${svgCgX}, ${svgCgY})`);
+      cgMarker.style.display = 'block';
+      document.getElementById('cg-text').innerText = `CG (${cgX}, ${cgY} mm)`;
+    } else if (cgMarker) {
+      cgMarker.style.display = 'none';
+    }
+
+    document.getElementById('res-cg-x').innerText = cgX + ' mm';
+    document.getElementById('res-cg-y').innerText = cgY + ' mm';
+    document.getElementById('analysis-cg-x').innerText = cgX + ' mm';
+
+    document.getElementById('val-fl').innerText = `${flVal} kN`;
+    document.getElementById('val-fr').innerText = `${frVal} kN`;
+    document.getElementById('val-rl').innerText = `${rlVal} kN`;
+    document.getElementById('val-rr').innerText = `${rrVal} kN`;
+
+    document.getElementById('wheel-fl-text').innerText = `${flVal} kN`;
+    document.getElementById('wheel-fr-text').innerText = `${frVal} kN`;
+    document.getElementById('wheel-rl-text').innerText = `${rlVal} kN`;
+    document.getElementById('wheel-rr-text').innerText = `${rrVal} kN`;
+
+    document.getElementById('wheel-fl-pct').innerText = `(24.5%)`;
+    document.getElementById('wheel-fr-pct').innerText = `(24.5%)`;
+    document.getElementById('wheel-rl-pct').innerText = `(25.6%)`;
+    document.getElementById('wheel-rr-pct').innerText = `(25.5%)`;
+
+    document.getElementById('res-front-pct').innerText = `${frontPct}% (${(frontTotalN/1000).toFixed(2)} kN)`;
+    document.getElementById('res-rear-pct').innerText = `${rearPct}% (${(rearTotalN/1000).toFixed(2)} kN)`;
+    document.getElementById('bar-front').style.width = `${frontPct}%`;
+    document.getElementById('bar-rear').style.width = `${rearPct}%`;
+
+    // 4. Analysis View Bars
+    document.getElementById('analysis-bar-fl').innerText = `${flVal} kN (24.5%)`;
+    document.getElementById('analysis-bar-fr').innerText = `${frVal} kN (24.5%)`;
+    document.getElementById('analysis-bar-rl').innerText = `${rlVal} kN (25.6%)`;
+    document.getElementById('analysis-bar-rr').innerText = `${rrVal} kN (25.5%)`;
+
+    // 5. Reports View
+    document.getElementById('rep-total-mass').innerText = totalMass + ' kg';
+    document.getElementById('rep-total-force').innerText = (totalWeightN / 1000).toFixed(2) + ' kN';
+    document.getElementById('rep-fl').innerText = flVal + ' kN';
+    document.getElementById('rep-fr').innerText = frVal + ' kN';
+    document.getElementById('rep-rl').innerText = rlVal + ' kN';
+    document.getElementById('rep-rr').innerText = rrVal + ' kN';
+
+    const reportTable = document.getElementById('report-table-body');
+    reportTable.innerHTML = '';
+    components.forEach(comp => {
+      reportTable.innerHTML += `
+        <tr class="border-b border-outline-variant/10">
+          <td class="py-2.5 text-on-surface">${comp.name}</td>
+          <td class="py-2.5 text-secondary-fixed">${comp.mass} kg</td>
+          <td class="py-2.5 text-secondary-fixed">${(comp.mass * 9.81).toFixed(1)} N</td>
+          <td class="py-2.5 text-on-surface-variant">${comp.x} mm</td>
+          <td class="py-2.5 text-on-surface-variant">${comp.y} mm</td>
+        </tr>
+      `;
+    });
+  }
+
+  function updateCompName(id, val) {
+    const comp = components.find(c => c.id === id);
+    if(comp) { comp.name = val; calculateAndRender(); }
+  }
+
+  function updateViewOptions() {
+    calculateAndRender();
+  }
+
+  function toggleSimulation() {
+    simulationActive = !simulationActive;
+    const icon = document.getElementById('play-icon');
+    const text = document.getElementById('play-text');
+    const particles = document.getElementById('load-flow-particles');
+
+    if (simulationActive) {
+      icon.innerText = 'pause';
+      text.innerText = 'PAUSE SIMULATION';
+      particles.classList.remove('opacity-0');
+      animInterval = setInterval(() => {
+        components[0].y += (Math.random() - 0.5) * 4;
+        calculateAndRender();
+      }, 300);
+    } else {
+      icon.innerText = 'play_arrow';
+      text.innerText = 'SHOW LOAD FLOW';
+      particles.classList.add('opacity-0');
+      clearInterval(animInterval);
+    }
+  }
+
+  function resetSimulation() {
+    simulationActive = false;
+    clearInterval(animInterval);
+    document.getElementById('play-icon').innerText = 'play_arrow';
+    document.getElementById('play-text').innerText = 'SHOW LOAD FLOW';
+    document.getElementById('load-flow-particles').classList.add('opacity-0');
+    loadDemoProject();
+  }
+
+  function toggleAssumptions() {
+    const content = document.getElementById('assumptions-content');
+    const arrow = document.getElementById('assumptions-arrow');
+    if (content.style.display === 'none') {
+      content.style.display = 'block';
+      arrow.innerText = 'expand_less';
+    } else {
+      content.style.display = 'none';
+      arrow.innerText = 'expand_more';
+    }
+  }
+
+  // Initial calculation
+  calculateAndRender();
+</script>
+
+
+</body></html>
