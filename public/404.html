@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="refresh" content="0; url=./" />
+    <title>Redirecting to EV Chassis Load Distribution Analyzer</title>
+    <script>
+      // Automatically redirect back to the app root preserving hash if any
+      var pathSegments = window.location.pathname.split('/').filter(Boolean);
+      var basePath = pathSegments.length > 0 ? '/' + pathSegments[0] + '/' : './';
+      window.location.replace(basePath + (window.location.hash || ''));
+    </script>
+  </head>
+  <body style="background-color: #081425; color: #d8e3fb; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0;">
+    <p>Redirecting to <a href="./" style="color: #4dabf7;">EV Chassis Load Distribution Analyzer</a>...</p>
+  </body>
+</html>
